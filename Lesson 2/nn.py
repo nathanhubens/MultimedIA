@@ -14,14 +14,14 @@ def get_data(path, bs,size, tfms, device):
     return data
 
 class MLPModel(nn.Module):
-    def __init__(self, input_size, output_size):
+    def __init__(self, input_size, n_features, output_size):
         super().__init__()
         self.input_size = input_size
-        self.linear1 = nn.Linear(input_size, 1024)
-        self.linear2 = nn.Linear(1024, 512)
-        self.linear3 = nn.Linear(512, 128)
-        self.linear4 = nn.Linear(128, 64)
-        self.linear5 = nn.Linear(64, output_size)
+        self.linear1 = nn.Linear(input_size, int(n_features))
+        self.linear2 = nn.Linear(int(n_features), int(n_features/2))
+        self.linear3 = nn.Linear(int(n_features/2), int(n_features/4))
+        self.linear4 = nn.Linear(int(n_features/4), int(n_features/8))
+        self.linear5 = nn.Linear(int(n_features/8), output_size)
         
     def forward(self, xb):
         # Flatten images into vectors
@@ -39,13 +39,14 @@ class MLPModel(nn.Module):
 
 
 class CNNModel(nn.Module):
-    def __init__(self, output_size):
+    def __init__(self, n_features, output_size):
         super().__init__()
-        self.conv1 = nn.Conv2d(3, 6, 3, 1, 1)
+        self.n_features = n_features
+        self.conv1 = nn.Conv2d(3, int(n_features), 3, 1, 1)
         self.pool = nn.MaxPool2d(2, 2)
-        self.conv2 = nn.Conv2d(6, 16, 3, 1, 1)
-        self.conv3 = nn.Conv2d(16, 32, 3,1, 1)
-        self.fc1 = nn.Linear(32*8*8, 120)
+        self.conv2 = nn.Conv2d(int(n_features), int(n_features*2), 3, 1, 1)
+        self.conv3 = nn.Conv2d(int(n_features*2), int(n_features*4), 3,1, 1)
+        self.fc1 = nn.Linear(int(n_features*4)*8*8, 120)
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, output_size)
 
@@ -53,7 +54,7 @@ class CNNModel(nn.Module):
         x = self.pool(F.relu(self.conv1(x)))
         x = self.pool(F.relu(self.conv2(x)))
         x = F.relu(self.conv3(x))
-        x = x.view(-1, 32*8*8)
+        x = x.view(-1, (self.n_features*4)*8*8)
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
