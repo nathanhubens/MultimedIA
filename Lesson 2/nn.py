@@ -78,9 +78,9 @@ class MNISTModel(nn.Module):
         self.pool = nn.MaxPool2d(2, 2)
         self.conv2 = nn.Conv2d(int(n_features), int(n_features)*2, 3, 1, 1)
         self.conv3 = nn.Conv2d(int(n_features)*2, int(n_features)*4, 3,1, 1)
-        self.fc1 = nn.Linear(int(n_features)*4*7*7, 120)
-        self.fc2 = nn.Linear(120, 84)
-        self.fc3 = nn.Linear(84, output_size)
+        self.fc1 = nn.Linear(int(n_features)*4*7*7, 84)
+        #self.fc2 = nn.Linear(120, 84)
+        self.fc2 = nn.Linear(84, output_size)
 
     def forward(self, x):
         x = self.pool(F.relu(self.conv1(x)))
@@ -88,8 +88,7 @@ class MNISTModel(nn.Module):
         x = F.relu(self.conv3(x))
         x = x.view(-1, int(self.n_features)*4*7*7)
         x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
+        x = self.fc2(x)
         return x
 
 def count_parameters(model):
