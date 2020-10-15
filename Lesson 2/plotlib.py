@@ -19,7 +19,6 @@ def show_scatterplot(X, colors, title=''):
 def plot_data(X, y, d=0, auto=False, zoom=1):
     X = X.cpu()
     y = y.cpu()
-    plt.figure(figsize=(8,8))
     plt.scatter(X.numpy()[:, 0], X.numpy()[:, 1], c=y, s=10, cmap=plt.cm.Spectral)
     plt.axis('square')
     plt.axis(np.array((-1.1, 1.1, -1.1, 1.1)) * zoom)
@@ -30,10 +29,33 @@ def plot_data(X, y, d=0, auto=False, zoom=1):
     plt.axvline(0, ymin=_m, color=_c, lw=1, zorder=0)
     plt.axhline(0, xmin=_m, color=_c, lw=1, zorder=0)
 
+def plot_model(X, y, model):
+    model.cpu()
+    mesh = np.arange(-1.1, 1.1, 0.01)
+    xx, yy = np.meshgrid(mesh, mesh)
+    with torch.no_grad():
+        data = torch.from_numpy(np.vstack((xx.reshape(-1), yy.reshape(-1))).T).float()
+        Z = model(data).detach()
+    Z = np.argmax(Z, axis=1).reshape(xx.shape)
+    plt.contourf(xx, yy, Z, cmap=plt.cm.Spectral, alpha=0.3)
+    plot_data(X, y)
 
-def create_spiral(n_data, n_dim, n_class):
-  X = torch.zeros(n_data * n_class, n_dim)
-  y = torch.zeros(n_data * n_class, dtype=torch.long)
+def train():
+    for t in range(1000):
+        y_pred = model(X)
+        loss = criterion(y_pred, y)
+        score, predicted = torch.max(y_pred, 1)
+        acc = (y == predicted).sum().float() / len(y)
+        print("[EPOCH]: %i, [LOSS]: %.6f, [ACCURACY]: %.3f" % (t, loss.item(), acc))
+        display.clear_output(wait=True)
+        optimizer.zero_grad() 
+        loss.backward()
+        optimizer.step()
+
+
+def create_spiral(n_data, n_dim, n_class, device):
+  X = torch.zeros(n_data * n_class, n_dim).to(device)
+  y = torch.zeros(n_data * n_class, dtype=torch.long).to(device)
   for c in range(n_class):
       index = 0
       t = torch.linspace(0, 1, n_data)
