@@ -20,7 +20,7 @@ def get_mnist_data(bs,size, tfms, device):
             .transform((tfms,None), size=size)
             .databunch(bs=bs, device=device))
     return data
-    
+
 
 class MLPModel(nn.Module):
     def __init__(self, input_size, n_features, output_size):
@@ -93,3 +93,15 @@ class MNISTModel(nn.Module):
 def count_parameters(model):
     n_params = sum(p.numel() for p in model.parameters())
     print(f'Number of parameters: {n_params:,}')
+
+def train(model, X,y):
+    for t in range(1000):
+        y_pred = model(X)
+        loss = criterion(y_pred, y)
+        score, predicted = torch.max(y_pred, 1)
+        acc = (y == predicted).sum().float() / len(y)
+        print("[EPOCH]: %i, [LOSS]: %.6f, [ACCURACY]: %.3f" % (t, loss.item(), acc))
+        display.clear_output(wait=True)
+        optimizer.zero_grad() 
+        loss.backward()
+        optimizer.step()
