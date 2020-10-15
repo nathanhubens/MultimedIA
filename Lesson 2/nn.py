@@ -71,13 +71,13 @@ class CNNModel(nn.Module):
         return x
 
 class MNISTModel(nn.Module):
-    def __init__(self, output_size):
+    def __init__(self, n_features, output_size):
         super().__init__()
-        self.conv1 = nn.Conv2d(3, 6, 3, 1, 1)
+        self.conv1 = nn.Conv2d(3, int(n_features), 3, 1, 1)
         self.pool = nn.MaxPool2d(2, 2)
-        self.conv2 = nn.Conv2d(6, 16, 3, 1, 1)
-        self.conv3 = nn.Conv2d(16, 32, 3,1, 1)
-        self.fc1 = nn.Linear(32*7*7, 120)
+        self.conv2 = nn.Conv2d(int(n_features), int(n_features)*2, 3, 1, 1)
+        self.conv3 = nn.Conv2d(int(n_features)*2, int(n_features)*4, 3,1, 1)
+        self.fc1 = nn.Linear(int(n_features)*4*7*7, 120)
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, output_size)
 
@@ -85,7 +85,7 @@ class MNISTModel(nn.Module):
         x = self.pool(F.relu(self.conv1(x)))
         x = self.pool(F.relu(self.conv2(x)))
         x = F.relu(self.conv3(x))
-        x = x.view(-1, 32*7*7)
+        x = x.view(-1, int(n_features)*4*7*7)
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
