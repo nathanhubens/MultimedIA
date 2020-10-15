@@ -4,6 +4,7 @@ import torch.nn as nn
 import numpy as np
 import matplotlib.pyplot as plt
 from fastai.vision import *
+from IPython import display
   
   
 def get_data(path, bs,size, tfms, device):
