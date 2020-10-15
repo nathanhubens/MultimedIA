@@ -95,6 +95,8 @@ def count_parameters(model):
     print(f'Number of parameters: {n_params:,}')
 
 def train(model, X,y):
+    criterion = torch.nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(model.parameters())
     for t in range(1000):
         y_pred = model(X)
         loss = criterion(y_pred, y)
