@@ -7,7 +7,8 @@ from fastai.vision import *
 from IPython import display
   
   
-def get_data(path, bs,size, tfms, device):
+def get_data(bs,size, tfms, device):
+    path = untar_data(URLs.CIFAR)
     src = ImageList.from_folder(path).split_by_folder(train='train', valid='test')
     data = (src.label_from_folder()
             .transform(get_transforms(xtra_tfms=tfms), size=size)
