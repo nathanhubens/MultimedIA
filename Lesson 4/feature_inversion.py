@@ -25,7 +25,7 @@ def dot_compare(layer, batch=1, cossim_pow=0):
   return inner
 
 
-def feature_inversion(img, model, layer=None, n_steps=512, cossim_pow=0.0, device='cpu'):
+def feature_inversion(img, model, layer, n_steps=512, cossim_pow=0.0, device='cpu'):
   # Convert image to torch.tensor and scale image
   img = torch.tensor(np.transpose(img, [2, 0, 1])).to(device)
   upsample = torch.nn.Upsample(224)
