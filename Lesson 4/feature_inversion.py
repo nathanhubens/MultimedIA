@@ -56,8 +56,8 @@ def feature_inversion(img, layer=None, n_steps=512, cossim_pow=0.0):
 
 
   def load(url):
-  size=224,224
-  response = requests.get(url)
-  img = Image.open(BytesIO(response.content))
-  img = img.resize(size, Image.ANTIALIAS)
-  return np.array(img, dtype='float32') / 255
+    size=224,224
+    response = requests.get(url)
+    img = Image.open(BytesIO(response.content))
+    img = img.resize(size, Image.ANTIALIAS)
+    return np.array(img, dtype='float32') / 255
