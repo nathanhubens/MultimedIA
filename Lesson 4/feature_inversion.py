@@ -55,7 +55,7 @@ def feature_inversion(img, layer=None, n_steps=512, cossim_pow=0.0):
   show(_[0][0])
 
 
-  def load(url):
+def load(url):
     size=224,224
     response = requests.get(url)
     img = Image.open(BytesIO(response.content))
