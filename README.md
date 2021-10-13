@@ -1,7 +1,6 @@
 # MultimedIA
 
 
-Multimed’IA
 
 * **Lesson 1:** Introduction to the tools (Colab and Python)
 * **Lesson 2:** Introduction to AI and NNs
