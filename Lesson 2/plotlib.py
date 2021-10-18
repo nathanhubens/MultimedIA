@@ -10,7 +10,7 @@ import math
 def show_scatterplot(X, colors, title=''):
     colors = colors.cpu().numpy()
     X = X.cpu().numpy()
-    plt.figure()
+    plt.figure(figsize=(10,10))
     plt.axis('equal')
     plt.scatter(X[:, 0], X[:, 1], c=colors, s=30)
     plt.title(title)
