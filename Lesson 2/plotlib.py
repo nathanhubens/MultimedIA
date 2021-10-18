@@ -19,7 +19,7 @@ def show_scatterplot(X, colors, title=''):
 def plot_data(X, y, d=0, auto=False, zoom=1):
     X = X.cpu()
     y = y.cpu()
-    plt.figure(figsize=(8,8))
+    #plt.figure(figsize=(8,8))
     plt.scatter(X.numpy()[:, 0], X.numpy()[:, 1], c=y, s=10, cmap=plt.cm.Spectral)
     plt.axis('square')
     plt.axis(np.array((-1.1, 1.1, -1.1, 1.1)) * zoom)
