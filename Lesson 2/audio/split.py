@@ -1,3 +1,7 @@
+from fastai.vision.all import *
+from fastaudio.core.all import *
+from fastaudio.augment.all import *
+from fastaudio.ci import skip_if_ci
 # Helper function to split the data
 def CrossValidationSplitter(col='fold', fold=1):
     "Split `items` (supposed to be a dataframe) by fold in `col`"
