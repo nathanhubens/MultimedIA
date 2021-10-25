@@ -1,6 +1,7 @@
 import torch
 import torchvision
 import torch.nn as nn
+import torch.nn.functional as F
 import numpy as np
 import matplotlib.pyplot as plt
 from fastai.vision import *
@@ -57,15 +58,16 @@ class CNNModel(nn.Module):
         self.pool = nn.MaxPool2d(2, 2)
         self.conv2 = nn.Conv2d(int(n_features), int(n_features*2), 3, 1, 1)
         self.conv3 = nn.Conv2d(int(n_features*2), int(n_features*4), 3,1, 1)
-        self.fc1 = nn.Linear(int(n_features*4)*8*8, 120)
+        self.pool2 = nn.AdaptiveAvgPool2d((4,4))
+        self.fc1 = nn.Linear(int(n_features*4)*4*4, 120)
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, output_size)
 
     def forward(self, x):
         x = self.pool(F.relu(self.conv1(x)))
         x = self.pool(F.relu(self.conv2(x)))
-        x = F.relu(self.conv3(x))
-        x = x.view(-1, (self.n_features*4)*8*8)
+        x = self.pool2(F.relu(self.conv3(x)))
+        x = x.view(-1, (self.n_features*4)*4*4)
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
