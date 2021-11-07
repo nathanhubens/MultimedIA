@@ -35,13 +35,13 @@ def check():
 
     pieces = random.sample(range(len(dset)), 1)
     for p in pieces:
-    p_data = dset[p]
-    p_id = p_data['piece_id']
-    p_bar_id = p_data['st_bar_id']
-    p_data['enc_input'] = p_data['enc_input'][ : p_data['enc_n_bars'] ]
-    p_data['enc_padding_mask'] = p_data['enc_padding_mask'][ : p_data['enc_n_bars'] ]
-    orig_song = p_data['dec_input'].tolist()[:p_data['length']]
-    orig_song = word2event(orig_song, dset.idx2event)
-    
-    midi_obj, orig_tempo = remi2midi(orig_song, 'midi_files.mid', return_first_tempo=True, enforce_tempo=False)
+        p_data = dset[p]
+        p_id = p_data['piece_id']
+        p_bar_id = p_data['st_bar_id']
+        p_data['enc_input'] = p_data['enc_input'][ : p_data['enc_n_bars'] ]
+        p_data['enc_padding_mask'] = p_data['enc_padding_mask'][ : p_data['enc_n_bars'] ]
+        orig_song = p_data['dec_input'].tolist()[:p_data['length']]
+        orig_song = word2event(orig_song, dset.idx2event)
+        
+        midi_obj, orig_tempo = remi2midi(orig_song, 'midi_files.mid', return_first_tempo=True, enforce_tempo=False)
 
